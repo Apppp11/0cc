@@ -5,7 +5,7 @@ int main(int argc, char **argv)
 {
     if (argc != 2)
     {
-        printf("引数の個数が正しくないです");
+        printf("引数の個数が正しくないです\n");
         return 1;
     }
     printf(".intel_syntax noprefix\n");
