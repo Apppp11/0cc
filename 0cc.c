@@ -22,11 +22,17 @@ struct Token
 };
 
 Token *token;
+char *user_input;
 
-void error(char *fmt, ...)
+void error_at(char *loc, char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
+
+    int pos = loc - user_input;
+    fprintf(stderr, "%s\n", user_input);
+    fprintf(stderr, "%*s", pos, " ");
+    fprintf(stderr, "^ ");
     vfprintf(stderr, fmt, ap);
     fprintf(stderr, "\n");
     exit(1);
@@ -43,14 +49,14 @@ bool consume_operator(char op)
 void expect_operator(char op)
 {
     if (token->kind != TK_OPERATOR || token->str[0] != op)
-        error("'%c'ではありません", op);
+        error_at(token->str, "'%c'ではありません", op);
     token = token->next_token;
 }
 
 int expect_number()
 {
     if (token->kind != TK_NUM)
-        error("数ではありません");
+        error_at(token->str, "数ではありません");
     int val = token->val;
     token = token->next_token;
     return val;
@@ -95,7 +101,7 @@ Token *tokenize(char *p)
             continue;
         }
 
-        error("トークナイズできません");
+        error_at(token->str, "トークナイズできません");
     }
     create_token(TK_EOF, cur_token, p);
     return head.next_token;
@@ -107,7 +113,7 @@ int main(int argc, char **argv)
         printf("引数の個数が正しくないです\n");
         return 1;
     }
-
+    user_input = argv[1];
     token = tokenize(argv[1]);
     printf(".intel_syntax noprefix\n");
     printf(".globl main\n");
