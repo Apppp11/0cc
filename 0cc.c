@@ -136,6 +136,7 @@ Node *create_num_node(int val);
 Node *expr();
 Node *mul();
 Node *primary();
+Node *unary();
 
 Node *create_op_node(NodeKind kind, Node *l_child, Node *r_child)
 {
@@ -176,22 +177,35 @@ Node *expr()
 }
 Node *mul()
 {
-    Node *node = primary();
+    Node *node = unary();
     while (1)
     {
         if (consume_operator('*'))
         {
-            node = create_op_node(ND_MUL, node, primary());
+            node = create_op_node(ND_MUL, node, unary());
         }
         else if (consume_operator('/'))
         {
-            node = create_op_node(ND_DIV, node, primary());
+            node = create_op_node(ND_DIV, node, unary());
         }
         else
         {
             return node;
         }
     }
+}
+
+Node *unary()
+{
+    if (consume_operator('+'))
+    {
+        return primary();
+    }
+    else if (consume_operator('-'))
+    {
+        return create_op_node(ND_SUB, create_num_node(0), primary());
+    }
+    return primary();
 }
 Node *primary()
 {
