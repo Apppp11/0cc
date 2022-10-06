@@ -28,4 +28,9 @@ assert 4 '(3+5)/2'
 #単項演算子
 assert 10 '-10+20'
 assert 75 '-(12+3)*-5'
+#比較演算子
+assert 1 '1==1'
+assert 0 '3+2!=5'
+assert 1 '2*2 > 3'
+assert 0 '5*5<=5+5'
 echo OK

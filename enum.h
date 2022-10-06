@@ -12,6 +12,10 @@ typedef enum
     ND_SUB,
     ND_MUL,
     ND_DIV,
+    ND_EQL,
+    ND_NEQ,
+    ND_LES,
+    ND_LEQ,
     ND_NUM,
 } NodeKind;
 #endif // !ENUM_H

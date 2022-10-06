@@ -27,15 +27,61 @@ Node *create_num_node(int val)
 
 Node *expr()
 {
+    return equality();
+}
+Node *equality()
+{
+    Node *node = relational();
+    while (1)
+    {
+        if (consume_operator("=="))
+        {
+            node = create_op_node(ND_EQL, node, relational());
+        }
+        else if (consume_operator("!="))
+        {
+            node = create_op_node(ND_NEQ, node, relational());
+        }
+        else
+            return node;
+    }
+}
+Node *relational()
+{
+    Node *node = add();
+    while (1)
+    {
+        if (consume_operator("<="))
+        {
+            node = create_op_node(ND_LEQ, node, add());
+        }
+        else if (consume_operator(">="))
+        {
+            node = create_op_node(ND_LEQ, add(), node);
+        }
+        else if (consume_operator(">"))
+        {
+            node = create_op_node(ND_LES, add(), node);
+        }
+        else if (consume_operator("<"))
+        {
+            node = create_op_node(ND_LES, node, add());
+        }
+        else
+            return node;
+    }
+}
+Node *add()
+{
     Node *node = mul();
     while (1)
     {
 
-        if (consume_operator('+'))
+        if (consume_operator("+"))
         {
             node = create_op_node(ND_ADD, node, mul());
         }
-        else if (consume_operator('-'))
+        else if (consume_operator("-"))
         {
             node = create_op_node(ND_SUB, node, mul());
         }
@@ -50,11 +96,11 @@ Node *mul()
     Node *node = unary();
     while (1)
     {
-        if (consume_operator('*'))
+        if (consume_operator("*"))
         {
             node = create_op_node(ND_MUL, node, unary());
         }
-        else if (consume_operator('/'))
+        else if (consume_operator("/"))
         {
             node = create_op_node(ND_DIV, node, unary());
         }
@@ -67,11 +113,11 @@ Node *mul()
 
 Node *unary()
 {
-    if (consume_operator('+'))
+    if (consume_operator("+"))
     {
         return primary();
     }
-    else if (consume_operator('-'))
+    else if (consume_operator("-"))
     {
         return create_op_node(ND_SUB, create_num_node(0), primary());
     }
@@ -79,10 +125,10 @@ Node *unary()
 }
 Node *primary()
 {
-    if (consume_operator('('))
+    if (consume_operator("("))
     {
         Node *node = expr();
-        expect_operator(')');
+        expect_operator(")");
         return node;
     }
     return create_num_node(expect_number());
@@ -118,6 +164,26 @@ void gen(Node *node)
     case ND_DIV:
         printf("    cqo\n");
         printf("    idiv rdi\n");
+        break;
+    case ND_EQL:
+        printf("    cmp rax,rdi\n");
+        printf("    sete al\n");
+        printf("    movzb rax,al\n");
+        break;
+    case ND_NEQ:
+        printf("    cmp rax,rdi\n");
+        printf("    setne al\n");
+        printf("    movzb rax,al\n");
+        break;
+    case ND_LES:
+        printf("    cmp rax,rdi\n");
+        printf("    setl al\n");
+        printf("    movzb rax,al\n");
+        break;
+    case ND_LEQ:
+        printf("    cmp rax,rdi\n");
+        printf("    setle al\n");
+        printf("    movzb rax,al\n");
         break;
     }
     printf("    push rax\n");

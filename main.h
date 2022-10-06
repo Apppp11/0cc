@@ -9,6 +9,7 @@ struct Token
     Token *next_token;
     int val;
     char *str;
+    int len;
 };
 typedef struct Node Node;
 //抽象構文木用構造体
