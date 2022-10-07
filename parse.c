@@ -5,40 +5,11 @@
 #include <ctype.h>
 #include <string.h>
 #include "parse.h"
-#include "main.h"
 //トークン列生成
 
 bool find_top(char *top, char *op)
 {
     return memcmp(top, op, strlen(op)) == 0;
-}
-bool consume_operator(char *op)
-{
-    if (token->kind != TK_OPERATOR || token->len != strlen(op) || memcmp(token->str, op, token->len))
-        return false;
-    token = token->next_token;
-    return true;
-}
-
-void expect_operator(char *op)
-{
-    if (token->kind != TK_OPERATOR || token->len != strlen(op) || memcmp(token->str, op, token->len))
-        error_at(token->str, "'%c'ではありません", op);
-    token = token->next_token;
-}
-
-int expect_number()
-{
-    if (token->kind != TK_NUM)
-        error_at(token->str, "数ではありません");
-    int val = token->val;
-    token = token->next_token;
-    return val;
-}
-
-bool at_eof()
-{
-    return token->kind == TK_EOF;
 }
 
 Token *create_token(TokenKind kind, Token *cur, char *str, int len)
