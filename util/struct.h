@@ -18,6 +18,7 @@ struct Node
     NodeKind kind;
     Node *l_child;
     Node *r_child;
-    int val;
+    int val;    //定数用
+    int offset; //変数用
 };
 #endif // !STRUCT_H

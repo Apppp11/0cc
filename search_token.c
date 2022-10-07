@@ -12,6 +12,14 @@ bool consume_operator(char *op)
     token = token->next_token;
     return true;
 }
+Token *consume_ident()
+{
+    if (token->kind != TK_IDENT)
+        return NULL;
+    Token *ret = token;
+    token = token->next_token;
+    return ret;
+}
 
 void expect_operator(char *op)
 {

@@ -25,9 +25,41 @@ Node *create_num_node(int val)
     return node;
 }
 
+Node *create_lvar_node(char *name)
+{
+    Node *node = calloc(1, sizeof(Node));
+    node->kind = ND_LVAR;
+    node->offset = (name[0] - 'a' + 1) * 8;
+    return node;
+}
+
+void program()
+{
+    int i = 0;
+    while (!at_eof())
+    {
+        code[i++] = stmt();
+    }
+    code[i] = NULL;
+}
+Node *stmt()
+{
+    Node *node = expr();
+    expect_operator(";");
+    return node;
+}
 Node *expr()
 {
-    return equality();
+    return assign();
+}
+Node *assign()
+{
+    Node *node = equality();
+    if (consume_operator("="))
+    {
+        create_op_node(ND_ASN, node, assign());
+    }
+    return node;
 }
 Node *equality()
 {
@@ -131,6 +163,11 @@ Node *primary()
         expect_operator(")");
         return node;
     }
+    Token *token = consume_ident();
+    if (token)
+    {
+        return create_lvar_node(token->str);
+    }
     return create_num_node(expect_number());
 }
 
@@ -138,7 +175,7 @@ Node *primary()
 void gen(Node *node)
 {
     if (node == NULL)
-        exit(1);
+        return;
     if (node->kind == ND_NUM)
     {
         printf("    push %d\n", node->val);

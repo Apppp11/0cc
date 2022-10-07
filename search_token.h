@@ -7,6 +7,7 @@
 
 extern Token *token;
 bool consume_operator(char *op);
+Token *consume_ident();
 void expect_operator(char *op);
 int expect_number();
 bool at_eof();

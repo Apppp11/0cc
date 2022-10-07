@@ -40,7 +40,7 @@ Token *tokenize(char *p)
             p += 2;
             continue;
         }
-        if (find_top(p, "+") || find_top(p, "-") || find_top(p, "*") || find_top(p, "/") || find_top(p, "(") || find_top(p, ")") || find_top(p, "<") || find_top(p, ">"))
+        if (find_top(p, "+") || find_top(p, "-") || find_top(p, "*") || find_top(p, "/") || find_top(p, "(") || find_top(p, ")") || find_top(p, "<") || find_top(p, ">") || find_top(p, "=") || find_top(p, ";"))
         {
             cur_token = create_token(TK_OPERATOR, cur_token, p++, 1);
             continue;
@@ -49,6 +49,11 @@ Token *tokenize(char *p)
         {
             cur_token = create_token(TK_NUM, cur_token, p, 1);
             cur_token->val = strtol(p, &p, 10);
+            continue;
+        }
+        if ('a' <= *p && *p <= 'z')
+        {
+            cur_token = create_token(TK_IDENT, cur_token, p++, 1);
             continue;
         }
 

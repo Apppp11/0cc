@@ -11,6 +11,8 @@
 Token *token;
 char *user_input;
 
+Node *code[100];
+
 int main(int argc, char **argv)
 {
     if (argc != 2)
@@ -27,9 +29,12 @@ int main(int argc, char **argv)
     printf("main:\n");
 
     //構文木作成
-    Node *node = expr();
-    gen(node);
-
+    program();
+    int i = 0;
+    while (code[i] != NULL)
+    {
+        gen(code[i++]);
+    }
     printf("    pop rax\n");
     printf("    ret\n");
     return 0;
