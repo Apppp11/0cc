@@ -7,6 +7,11 @@
 
 #include "error.h"
 //エラー出力
+void error(char *fmt)
+{
+    fprintf(stderr, "%s\n", fmt);
+    exit(1);
+}
 void error_at(char *loc, char *fmt, ...)
 {
     va_list ap;
