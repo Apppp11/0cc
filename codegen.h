@@ -3,6 +3,8 @@
 
 #include "search_token.h"
 #include "lvar.h"
+#include "util/enum.h"
+#include "util/struct.h"
 
 extern Node *code[100];
 

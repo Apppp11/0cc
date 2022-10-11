@@ -42,4 +42,8 @@ assert 18 'aaa=10;bbb=aaa*2;ccc=bbb/aaa;bbb-ccc;'
 #return文
 assert 4 'return 4;return 1;return 2;'
 assert 14 'a=3;b=5*6-8;return a+b/2;'
+#if文
+assert 76 'if(11>3) return 76;return 38;'
+assert 4 'a=3;b=4;if(a*a==b)return a;return b;'
+assert 3 'a=3;b=9;if(a*a==b)return a;return b;'
 echo OK

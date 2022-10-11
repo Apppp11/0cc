@@ -44,6 +44,12 @@ Token *tokenize(char *p)
             p += strlen("return");
             continue;
         }
+        if (find_top(p, "if") && !is_alnum(*(p + strlen("if"))))
+        {
+            cur_token = create_token(TK_IF, cur_token, p, strlen("if"));
+            p += strlen("if");
+            continue;
+        }
         if (find_top(p, "==") || find_top(p, "!=") || find_top(p, ">=") || find_top(p, "<="))
         {
             cur_token = create_token(TK_OPERATOR, cur_token, p, 2);

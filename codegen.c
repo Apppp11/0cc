@@ -6,8 +6,9 @@
 #include <string.h>
 #include "codegen.h"
 
-//構文木生成
+int if_idx = 0;
 
+//構文木生成
 Node *create_op_node(NodeKind kind, Node *l_child, Node *r_child)
 {
     Node *node = calloc(1, sizeof(Node));
@@ -50,10 +51,10 @@ Node *create_lvar_node(char *name, int len)
     return node;
 }
 
-Node *create_return_node()
+Node *create_node(NodeKind nk)
 {
     Node *node = calloc(1, sizeof(Node));
-    node->kind = ND_RETURN;
+    node->kind = nk;
     return node;
 }
 void program()
@@ -70,14 +71,23 @@ Node *stmt()
     Node *node;
     if (consume_token(TK_RETURN))
     {
-        node = create_return_node();
+        node = create_node(ND_RETURN);
         node->l_child = expr();
+        expect_operator(";");
+    }
+    else if (consume_token(TK_IF))
+    {
+        node = create_node(ND_IF);
+        expect_operator("(");
+        node->l_child = expr();
+        expect_operator(")");
+        node->r_child = stmt();
     }
     else
     {
         node = expr();
+        expect_operator(";");
     }
-    expect_operator(";");
     return node;
 }
 Node *expr()
@@ -226,6 +236,16 @@ void gen(Node *node)
         printf("    mov rsp, rbp\n");
         printf("    pop rbp\n");
         printf("    ret\n");
+        return;
+        break;
+    case ND_IF:
+        gen(node->l_child);
+        printf("    pop rax\n");
+        printf("    cmp rax, 0\n");
+        printf("    je .Lend%d\n", if_idx);
+        gen(node->r_child);
+        printf(".Lend%d:\n", if_idx);
+        if_idx++;
         return;
         break;
     case ND_NUM:

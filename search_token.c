@@ -34,7 +34,7 @@ Token *consume_ident()
 void expect_operator(char *op)
 {
     if (token->kind != TK_OPERATOR || token->len != strlen(op) || memcmp(token->str, op, token->len))
-        error_at(token->str, "'%c'ではありません", op);
+        error_at(token->str, "'%s'ではありません", op);
     token = token->next_token;
 }
 
