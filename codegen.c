@@ -50,6 +50,12 @@ Node *create_lvar_node(char *name, int len)
     return node;
 }
 
+Node *create_return_node()
+{
+    Node *node = calloc(1, sizeof(Node));
+    node->kind = ND_RETURN;
+    return node;
+}
 void program()
 {
     int i = 0;
@@ -61,7 +67,16 @@ void program()
 }
 Node *stmt()
 {
-    Node *node = expr();
+    Node *node;
+    if (consume_token(TK_RETURN))
+    {
+        node = create_return_node();
+        node->l_child = expr();
+    }
+    else
+    {
+        node = expr();
+    }
     expect_operator(";");
     return node;
 }
@@ -205,6 +220,14 @@ void gen(Node *node)
 {
     switch (node->kind)
     {
+    case ND_RETURN:
+        gen(node->l_child);
+        printf("    pop rax\n");
+        printf("    mov rsp, rbp\n");
+        printf("    pop rbp\n");
+        printf("    ret\n");
+        return;
+        break;
     case ND_NUM:
         printf("    push %d\n", node->val);
         return;

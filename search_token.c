@@ -5,6 +5,16 @@
 #include <ctype.h>
 #include <string.h>
 #include "search_token.h"
+bool consume_token(TokenKind tk)
+{
+    if (token->kind == tk)
+    {
+        token = token->next_token;
+        return true;
+    }
+    else
+        return false;
+}
 bool consume_operator(char *op)
 {
     if (token->kind != TK_OPERATOR || token->len != strlen(op) || memcmp(token->str, op, token->len))

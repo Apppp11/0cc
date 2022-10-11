@@ -39,4 +39,7 @@ assert 144 'x=5;y=x+2;z=x+y;(x+y)*z;'
 #変数
 assert 5 'hoge=2;fuga=3;hoge+fuga;'
 assert 18 'aaa=10;bbb=aaa*2;ccc=bbb/aaa;bbb-ccc;'
+#return文
+assert 4 'return 4;return 1;return 2;'
+assert 14 'a=3;b=5*6-8;return a+b/2;'
 echo OK

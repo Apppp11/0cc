@@ -11,6 +11,10 @@ bool find_top(char *top, char *op)
 {
     return memcmp(top, op, strlen(op)) == 0;
 }
+bool is_alnum(char c)
+{
+    return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z' || '0' <= c && c <= '9' || c == '_');
+}
 
 Token *create_token(TokenKind kind, Token *cur, char *str, int len)
 {
@@ -32,6 +36,12 @@ Token *tokenize(char *p)
         if (isspace(*p))
         {
             p++;
+            continue;
+        }
+        if (find_top(p, "return") && !is_alnum(*(p + strlen("return"))))
+        {
+            cur_token = create_token(TK_RETURN, cur_token, p, strlen("return"));
+            p += strlen("return");
             continue;
         }
         if (find_top(p, "==") || find_top(p, "!=") || find_top(p, ">=") || find_top(p, "<="))
