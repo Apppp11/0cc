@@ -2,6 +2,7 @@
 #define CODEGEN_H
 
 #include "search_token.h"
+#include "lvar.h"
 
 extern Node *code[100];
 

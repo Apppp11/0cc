@@ -8,10 +8,11 @@
 #include "main.h"
 
 //変数宣言
-Token *token;
-char *user_input;
+Token *token;     //トークン列
+char *user_input; //入力文字列
+LVar *locals;     //ローカル変数列
 
-Node *code[100];
+Node *code[100]; //構文木
 
 int main(int argc, char **argv)
 {

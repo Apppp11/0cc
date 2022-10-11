@@ -5,6 +5,7 @@
     "struct.h": "c",
     "enum.h": "c",
     "parse.h": "c",
-    "ctype.h": "c"
+    "ctype.h": "c",
+    "lvar.h": "c"
   }
 }

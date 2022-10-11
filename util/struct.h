@@ -21,4 +21,15 @@ struct Node
     int val;    //定数用
     int offset; //変数用
 };
+
+//ローカル変数名保持用
+typedef struct LVar LVar;
+struct LVar
+{
+    LVar *nextLVar;
+    char *name;
+    int len;
+    int offset;
+};
+
 #endif // !STRUCT_H

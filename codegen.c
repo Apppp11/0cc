@@ -25,11 +25,28 @@ Node *create_num_node(int val)
     return node;
 }
 
-Node *create_lvar_node(char *name)
+Node *create_lvar_node(char *name, int len)
 {
     Node *node = calloc(1, sizeof(Node));
     node->kind = ND_LVAR;
-    node->offset = (name[0] - 'a' + 1) * 8;
+    LVar *lvar = find_lvar(name, len);
+    if (lvar)
+    {
+        node->offset = lvar->offset;
+    }
+    else
+    {
+        lvar = calloc(1, sizeof(LVar));
+        lvar->nextLVar = locals;
+        lvar->name = name;
+        lvar->len = len;
+        if (locals)
+            lvar->offset = locals->offset + 8;
+        else
+            lvar->offset = 0;
+        node->offset = lvar->offset;
+        locals = lvar;
+    }
     return node;
 }
 
@@ -166,7 +183,7 @@ Node *primary()
     Token *token = consume_ident();
     if (token)
     {
-        return create_lvar_node(token->str);
+        return create_lvar_node(token->str, token->len);
     }
     return create_num_node(expect_number());
 }

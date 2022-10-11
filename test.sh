@@ -33,7 +33,10 @@ assert 1 '1==1;'
 assert 0 '3+2!=5;'
 assert 1 '2*2 > 3;'
 assert 0 '5*5<=5+5;'
-#変数
+#1文字変数
 assert 5 'a=2;b=3;a+b;'
 assert 144 'x=5;y=x+2;z=x+y;(x+y)*z;'
+#変数
+assert 5 'hoge=2;fuga=3;hoge+fuga;'
+assert 18 'aaa=10;bbb=aaa*2;ccc=bbb/aaa;bbb-ccc;'
 echo OK

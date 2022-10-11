@@ -51,9 +51,16 @@ Token *tokenize(char *p)
             cur_token->val = strtol(p, &p, 10);
             continue;
         }
-        if ('a' <= *p && *p <= 'z')
+        int lv_size = 0;
+        for (;; lv_size++)
         {
-            cur_token = create_token(TK_IDENT, cur_token, p++, 1);
+            if (!('a' <= *(p + lv_size) && *(p + lv_size) <= 'z'))
+                break;
+        }
+        if (lv_size != 0)
+        {
+            cur_token = create_token(TK_IDENT, cur_token, p, lv_size);
+            p += lv_size;
             continue;
         }
 
