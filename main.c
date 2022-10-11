@@ -28,14 +28,23 @@ int main(int argc, char **argv)
     printf(".globl main\n");
     printf("main:\n");
 
+    //変数領域確保
+    printf("    push rbp\n");
+    printf("    mov rbp, rsp\n");
+    printf("    sub rsp, 208\n");
+
     //構文木作成
     program();
     int i = 0;
     while (code[i] != NULL)
     {
         gen(code[i++]);
+        printf("    pop rax\n");
     }
-    printf("    pop rax\n");
+
+    printf("    mov rsp, rbp\n");
+    printf("    pop rbp\n");
+
     printf("    ret\n");
     return 0;
 }
