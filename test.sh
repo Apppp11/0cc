@@ -46,4 +46,8 @@ assert 14 'a=3;b=5*6-8;return a+b/2;'
 assert 76 'if(11>3) return 76;return 38;'
 assert 4 'a=3;b=4;if(a*a==b)return a;return b;'
 assert 3 'a=3;b=9;if(a*a==b)return a;return b;'
+#else
+assert 38 'if(11<3)return 76;else return 38;'
+assert 9 'a=3;if(a==3)a=a*a;else a=a+1;return a;'
+assert 5 'a=4;if(a==3)a=a*a;else a=a+1;return a;'
 echo OK

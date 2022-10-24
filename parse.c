@@ -38,6 +38,12 @@ Token *tokenize(char *p)
             p++;
             continue;
         }
+        if (find_top(p, "else") && !is_alnum(*(p + strlen("else"))))
+        {
+            cur_token = create_token(TK_ELSE, cur_token, p, strlen("else"));
+            p += strlen("else");
+            continue;
+        }
         if (find_top(p, "return") && !is_alnum(*(p + strlen("return"))))
         {
             cur_token = create_token(TK_RETURN, cur_token, p, strlen("return"));

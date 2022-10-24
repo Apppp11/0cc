@@ -7,6 +7,7 @@ typedef enum
     TK_IDENT,
     TK_RETURN,
     TK_IF,
+    TK_ELSE,
     TK_EOF,
 } TokenKind;
 typedef enum
@@ -24,5 +25,6 @@ typedef enum
     ND_LVAR,
     ND_RETURN,
     ND_IF,
+    ND_ELSE,
 } NodeKind;
 #endif // !ENUM_H

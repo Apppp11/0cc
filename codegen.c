@@ -79,9 +79,13 @@ Node *stmt()
     {
         node = create_node(ND_IF);
         expect_operator("(");
-        node->l_child = expr();
+        node->cond = expr();
         expect_operator(")");
-        node->r_child = stmt();
+        node->then = stmt();
+        if (consume_token(TK_ELSE))
+        {
+            node->els = stmt();
+        }
     }
     else
     {
@@ -239,12 +243,24 @@ void gen(Node *node)
         return;
         break;
     case ND_IF:
-        gen(node->l_child);
+        gen(node->cond);
         printf("    pop rax\n");
         printf("    cmp rax, 0\n");
-        printf("    je .Lend%d\n", if_idx);
-        gen(node->r_child);
-        printf(".Lend%d:\n", if_idx);
+        if (node->els != NULL)
+        {
+            printf("    je .Lelse%d\n", if_idx);
+            gen(node->then);
+            printf("    jmp .Lend%d\n", if_idx);
+            printf(".Lelse%d:\n", if_idx);
+            gen(node->els);
+            printf(".Lend%d:\n", if_idx);
+        }
+        else
+        {
+            printf("    je .Lend%d\n", if_idx);
+            gen(node->then);
+            printf(".Lend%d:\n", if_idx);
+        }
         if_idx++;
         return;
         break;

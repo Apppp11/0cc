@@ -20,6 +20,9 @@ struct Node
     Node *r_child;
     int val;    //定数用
     int offset; //変数用
+    Node *cond;
+    Node *then;
+    Node *els;
 };
 
 //ローカル変数名保持用
